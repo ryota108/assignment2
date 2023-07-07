@@ -1,7 +1,7 @@
 // 1. articlesに型を付けてください
 // 2. 公開済みの記事だけを返す関数を書いてください
 
-type Article = {
+export type Article = {
     id:number;
     title:string;
     content:string;
@@ -31,7 +31,17 @@ type Article = {
     }
   ]
   
-  export function filterPublishFunc (articles:ArticlesType):ArticlesType{
+  function filterPublishFunc (articles:ArticlesType):ArticlesType{
     return articles.filter(article => article.isPublished)
+  }
+
+  export function sleep(msec: number) {
+    return new Promise((resolve) => setTimeout(resolve, msec));
+  }
+
+  
+  export async function fetchPublicArticles(): Promise<Article[]> {
+    await sleep(2000);
+    return filterPublishFunc(articles);
   }
   
