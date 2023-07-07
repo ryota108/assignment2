@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { articles, filterPublishFunc } from "./articles";
+// 課題1の成果をarticles.tsに反映して、
+// ここから呼び出してみましょう。
 
-function App() {
+const publishedArticles = filterPublishFunc(articles);
+
+const posts = publishedArticles.map((article) => (
+  <>
+    <p>{article.title}</p>
+    <div>{article.content}</div>
+  </>
+));
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <p>課題1の成果を基に、公開記事の一覧を表示してください。</p>
+      <div>
+        <div>{posts}</div>
+      </div>
+    </main>
   );
 }
-
-export default App;
