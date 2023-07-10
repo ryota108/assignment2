@@ -1,32 +1,36 @@
 import "./App.css";
-import { useState, useEffect } from "react";
-import { Article, fetchPublicArticles } from "./articles";
-// 課題1の成果をarticles.tsに反映して、
-// ここから呼び出してみましょう。
+import { Article } from "./articles";
+import Card from "./UI/Card";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { useQuery } from "react-query";
 
 export default function App() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  async function getPostsData(): Promise<Article[]> {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const data = await response.json();
+    return data as Article[];
+  }
 
-  useEffect(() => {
-    setIsLoading(true);
-    fetchPublicArticles()
-      .then((publishedArticle) => {
-        setArticles(publishedArticle);
-        setIsLoading(false);
-      })
-      .catch((e) => console.error(e));
-  }, []);
+  const { data, isLoading, isError } = useQuery("posts", getPostsData);
+
+  if (isLoading) {
+    return <span>Loading...</span>
+  }
+
+  if (isError) {
+    return <span>something Happen</span>;
+  }
 
   return (
     <main>
-      {isLoading && <p>Loading...</p>}
-      {articles.map((article) => (
-        <div key={article.id}>
+      {data?.map((article) => (
+        <Card key={article.id}>
+          <p>No.{article.id}</p>
           <p>{article.title}</p>
-          <div>{article.content}</div>
-        </div>
+          <div>{article.body}</div>
+        </Card>
       ))}
+      <ReactQueryDevtools initialIsOpen={false} />
     </main>
   );
 }
